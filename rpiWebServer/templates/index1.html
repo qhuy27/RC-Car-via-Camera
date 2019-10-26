@@ -20,8 +20,20 @@
  
  
 <script>
+
+function servo(angle){
+	$.get(angle)
+} 
  
- 
+function speed_low(){
+	$.get("/speed_low")
+}
+function speed_medium(){
+	$.get("/speed_medium")
+}
+function speed_high(){
+	$.get("/speed_high")
+}
 var forward_fired = false;
 var backward_fired = false;
 var left_fired = false;
@@ -126,6 +138,8 @@ document.onkeyup = function() {
  
 };
  
+
+
 </script>
  
 </head>
@@ -155,17 +169,43 @@ document.onkeyup = function() {
       <button id="right" type="button" class="btn btn-default btn-lg disabled">
         <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
       </button>
-
  
     </center>
  
   </div>
-	
+  <div>
+  	<button class ="button" onclick = "speed_low()">low</button>
+  	<button class ="button" onclick = "speed_medium()">medium</button>
+  	<button class ="button" onclick = "speed_high()">high</button>
+  </div>	
   <div>
 	<!--<center> <img src="{{ url_for('video_feed') }}"></center>-->
-	<center> <img src="stream.mjpg" width="640" height="480"></center>
+	<center> <img src="stream.mjpg" width="320" height="240"></center>
 
   </div>
+
+	<div>
+		<hr>
+	<h4> PAN :  
+		<button id = "pan/30" class = "button" onclick = "servo(this.id)" >30</button>
+		<button id = "pan/45" class = "button" onclick = "servo(this.id)">45</button>
+		<button id = "pan/60" class = "button" onclick = "servo(this.id)">60</button>
+		<button id = "pan/75" class = "button" onclick = "servo(this.id)">75</button>
+		<button id = "pan/90" class = "button" onclick = "servo(this.id)">90</button>
+		<button id = "pan/105" class = "button" onclick = "servo(this.id)">105</button>
+		<button id = "pan/120" class = "button" onclick = "servo(this.id)">120</button>
+	</h4>
+		<h4> TILT: 
+		<button id = "tilt/30" class = "button" onclick = "servo(this.id)">30</button>
+		<button id = "tilt/45" class = "button" onclick = "servo(this.id)">45</button>
+		<button id = "tilt/60" class = "button" onclick = "servo(this.id)">60</button>
+		<button id = "tilt/75" class = "button" onclick = "servo(this.id)">75</button>
+		<button id = "tilt/90" class = "button" onclick = "servo(this.id)">90</button>
+		<button id = "tilt/105" class = "button" onclick = "servo(this.id)">105</button>
+		<button id = "tilt/120" class = "button" onclick = "servo(this.id)">120</button>
+	</h4>
+		<hr>
+	</div>
 </div>
  
 </body>

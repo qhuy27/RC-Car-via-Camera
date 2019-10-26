@@ -24,9 +24,9 @@ class Encoder():
 	def value(self):
 		return self.counter
 
-KP = 1/500
-KD = 0
-KI = 0
+KP = 1/2000
+KD = 0*1/200000
+KI = 0*1/400000
 
 e1_prev_error = 0
 e2_prev_error = 0
@@ -46,12 +46,14 @@ def init_encoder():
 
 def init_robot():
 	global r
-	r = Robot((20,21,12),(22,24,25))
+	r = Robot((20,21,16),(22,23,24))
 
 def reset_PID():
+	global KD
 	global speed_l, speed_r
 	global e1_prev_error, e2_prev_error
 	global e1_sum_error, e2_sum_error
+	KD = 0
 	speed_l = 0
 	speed_r = 0
 	e1_prev_error = 0
@@ -67,31 +69,34 @@ def PID(ref_speed_l, ref_speed_r):
 	global left, right
 
 	if (ref_speed_l>0 and ref_speed_r>0):
-		print("-------------")
+#		print("-------------")
 		left_error = ref_speed_l - left.value
 		right_error = ref_speed_r - right.value
-
-		print("r_er             {}              l_er            {}".format(right_error, left_error))
+		if (speed_l !=0 or speed_r != 0):
+			KD = KD * (speed_l+speed_r)/2
+#		print("r_er             {}              l_er            {}".format(right_error, left_error))
 		speed_l += (left_error * KP)  + (e1_prev_error * KD) + (e2_sum_error * KI)
 		speed_r += (right_error * KP) + (e1_prev_error * KD) + (e1_sum_error * KI)
-		print("speed_r          {}              speed_l         {}".format(speed_r, speed_l))
-
+#		print("speed_r          {}              speed_l         {}".format(speed_r, speed_l))
+		if (speed_l > 1):
+			speed_l = 1
+		if (speed_r > 1):
+			speed_r = 1
 		r.value = (speed_l, speed_r)
 
-		print("right            {}              left            {}".format(right.value, left.value))
-		print("ref_r            {}              ref_l           {}".format(ref_speed_r, ref_speed_l))
+#		print("right            {}              left            {}".format(right.value, left.value))
+#		print("ref_r            {}              ref_l           {}".format(ref_speed_r, ref_speed_l))
 
 		right.reset()
 		left.reset()
 
-		sleep(0.5)
+		sleep(0.2)
 
 		e1_prev_error = left_error
 		e2_prev_error = right_error
 
 		e1_sum_error += left_error
 		e2_sum_error += right_error
-
 	else:
 		r.value = (ref_speed_l, ref_speed_r)
 		left.reset()
